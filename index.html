@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ghana PAYE & VAT Calculator</title>
+    <meta
+      name="description"
+      content="Static Ghana tax calculator for monthly PAYE and VAT using current Ghana Revenue Authority rules."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page-shell">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Static and GitHub Pages-ready</p>
+          <h1>Ghana PAYE and VAT calculator for current GRA rules</h1>
+          <p class="hero-text">
+            Calculate monthly PAYE, SSNIT-adjusted take-home pay, and VAT under
+            Ghana's January 1, 2026 VAT reforms. Everything runs in plain HTML,
+            CSS, and JavaScript.
+          </p>
+          <div class="hero-badges">
+            <span>PAYE rates effective January 1, 2024</span>
+            <span>VAT reforms effective January 1, 2026</span>
+            <span>No build step required</span>
+          </div>
+        </div>
+        <aside class="hero-card">
+          <p class="hero-card-label">Quick guide</p>
+          <ul class="hero-list">
+            <li>Use the PAYE section for monthly salary calculations.</li>
+            <li>
+              Use the VAT section for standard-rated, zero-rated, or exempt
+              supplies.
+            </li>
+            <li>
+              Double-check special cases such as bonuses, overtime, benefits in
+              kind, or sector-specific VAT exemptions.
+            </li>
+          </ul>
+        </aside>
+      </section>
+
+      <section class="grid">
+        <article class="panel">
+          <div class="panel-head">
+            <div>
+              <p class="panel-kicker">Calculator 01</p>
+              <h2>Monthly PAYE</h2>
+            </div>
+            <span class="chip">Employment income</span>
+          </div>
+
+          <form id="paye-form" class="calculator-form" autocomplete="off">
+            <div class="field-group">
+              <span class="field-label">Taxpayer type</span>
+              <div class="segmented-control">
+                <label>
+                  <input
+                    type="radio"
+                    name="taxpayerType"
+                    value="resident"
+                    checked
+                  />
+                  <span>Resident</span>
+                </label>
+                <label>
+                  <input type="radio" name="taxpayerType" value="nonResident" />
+                  <span>Non-resident</span>
+                </label>
+              </div>
+            </div>
+
+            <label class="field">
+              <span class="field-label">Monthly basic salary</span>
+              <div class="money-input">
+                <span>GH&#8373;</span>
+                <input
+                  id="basicSalary"
+                  name="basicSalary"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value="0"
+                />
+              </div>
+            </label>
+
+            <label class="field">
+              <span class="field-label">Monthly taxable allowances</span>
+              <div class="money-input">
+                <span>GH&#8373;</span>
+                <input
+                  id="allowances"
+                  name="allowances"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value="0"
+                />
+              </div>
+            </label>
+
+            <label class="field">
+              <span class="field-label">Monthly tax relief / allowable deductions</span>
+              <div class="money-input">
+                <span>GH&#8373;</span>
+                <input
+                  id="relief"
+                  name="relief"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value="0"
+                />
+              </div>
+            </label>
+
+            <label class="check-field">
+              <input id="includeSsnit" name="includeSsnit" type="checkbox" checked />
+              <span>Deduct employee SSNIT at 5.5% of basic salary</span>
+            </label>
+          </form>
+
+          <section class="results">
+            <div class="result-card primary">
+              <p class="result-label">Monthly take-home pay</p>
+              <p class="result-value" id="netIncome">GH&#8373;0.00</p>
+            </div>
+
+            <div class="results-grid">
+              <div class="result-card">
+                <p class="result-label">PAYE</p>
+                <p class="result-value small" id="payeTax">GH&#8373;0.00</p>
+              </div>
+              <div class="result-card">
+                <p class="result-label">SSNIT</p>
+                <p class="result-value small" id="ssnitValue">GH&#8373;0.00</p>
+              </div>
+              <div class="result-card">
+                <p class="result-label">Chargeable income</p>
+                <p class="result-value small" id="chargeableIncome">GH&#8373;0.00</p>
+              </div>
+              <div class="result-card">
+                <p class="result-label">Gross income</p>
+                <p class="result-value small" id="grossIncome">GH&#8373;0.00</p>
+              </div>
+            </div>
+
+            <details class="breakdown" open>
+              <summary>Show PAYE breakdown</summary>
+              <div id="payeBreakdown" class="breakdown-table"></div>
+            </details>
+          </section>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head">
+            <div>
+              <p class="panel-kicker">Calculator 02</p>
+              <h2>VAT</h2>
+            </div>
+            <span class="chip">Goods and services</span>
+          </div>
+
+          <form id="vat-form" class="calculator-form" autocomplete="off">
+            <label class="field">
+              <span class="field-label">Tax treatment</span>
+              <select id="vatTreatment" name="vatTreatment">
+                <option value="standard">Standard rate (15% VAT + 2.5% NHIL + 2.5% GETFund)</option>
+                <option value="zeroRated">Zero-rated supply</option>
+                <option value="exempt">Exempt / relieved supply</option>
+              </select>
+            </label>
+
+            <div class="field-group">
+              <span class="field-label">Amount type</span>
+              <div class="segmented-control">
+                <label>
+                  <input
+                    type="radio"
+                    name="vatAmountType"
+                    value="exclusive"
+                    checked
+                  />
+                  <span>Tax exclusive</span>
+                </label>
+                <label>
+                  <input type="radio" name="vatAmountType" value="inclusive" />
+                  <span>Tax inclusive</span>
+                </label>
+              </div>
+            </div>
+
+            <label class="field">
+              <span class="field-label">Amount</span>
+              <div class="money-input">
+                <span>GH&#8373;</span>
+                <input
+                  id="vatAmount"
+                  name="vatAmount"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value="0"
+                />
+              </div>
+            </label>
+          </form>
+
+          <section class="results">
+            <div class="result-card primary">
+              <p class="result-label">Total tax-inclusive value</p>
+              <p class="result-value" id="vatInclusiveTotal">GH&#8373;0.00</p>
+            </div>
+
+            <div class="results-grid">
+              <div class="result-card">
+                <p class="result-label">Taxable value</p>
+                <p class="result-value small" id="vatTaxableValue">GH&#8373;0.00</p>
+              </div>
+              <div class="result-card">
+                <p class="result-label">Total tax</p>
+                <p class="result-value small" id="vatTotalTax">GH&#8373;0.00</p>
+              </div>
+              <div class="result-card">
+                <p class="result-label">VAT (15%)</p>
+                <p class="result-value small" id="vatValue">GH&#8373;0.00</p>
+              </div>
+              <div class="result-card">
+                <p class="result-label">NHIL (2.5%)</p>
+                <p class="result-value small" id="nhilValue">GH&#8373;0.00</p>
+              </div>
+              <div class="result-card">
+                <p class="result-label">GETFund (2.5%)</p>
+                <p class="result-value small" id="getFundValue">GH&#8373;0.00</p>
+              </div>
+            </div>
+
+            <div class="note-card" id="vatNote"></div>
+          </section>
+        </article>
+      </section>
+
+      <section class="info-strip">
+        <div class="info-card">
+          <h3>Included assumptions</h3>
+          <p>
+            PAYE is calculated on monthly chargeable employment income after the
+            SSNIT deduction toggle and the relief field you enter. Non-resident
+            PAYE uses the current flat 25% rule shown by GRA.
+          </p>
+        </div>
+        <div class="info-card">
+          <h3>VAT scope</h3>
+          <p>
+            Standard VAT uses the post-reform structure effective January 1,
+            2026: 15% VAT, 2.5% NHIL, and 2.5% GETFund, all applied on the same
+            taxable value.
+          </p>
+        </div>
+        <div class="info-card">
+          <h3>Special cases</h3>
+          <p>
+            Bonuses, overtime, benefits in kind, sector-specific exemptions, and
+            withholding scenarios may need separate treatment outside this tool.
+          </p>
+        </div>
+      </section>
+
+      <section class="sources">
+        <div class="sources-head">
+          <p class="panel-kicker">Sources</p>
+          <h2>Current official references</h2>
+        </div>
+        <ul class="sources-list">
+          <li>
+            <a href="https://gra.gov.gh/domestic-tax/tax-types/paye/" target="_blank" rel="noreferrer">
+              Ghana Revenue Authority: PAYE rates for resident and non-resident individuals
+            </a>
+            <span>Rates shown by GRA as effective January 1, 2024.</span>
+          </li>
+          <li>
+            <a href="https://gra.gov.gh/domestic-tax/tax-types/vat/" target="_blank" rel="noreferrer">
+              Ghana Revenue Authority: VAT reforms and rate structure
+            </a>
+            <span>Reforms shown by GRA as effective January 1, 2026.</span>
+          </li>
+          <li>
+            <a href="https://gra.gov.gh/news/portfolio/notice-to-all-vat-registered-taxpayers/" target="_blank" rel="noreferrer">
+              GRA notice to VAT-registered taxpayers
+            </a>
+            <span>Confirms the removal of the COVID-19 levy and the 20% effective standard rate.</span>
+          </li>
+        </ul>
+        <p class="disclaimer">
+          Disclaimer: this calculator is an informational aid, not tax advice.
+          Confirm unusual cases with GRA guidance or a qualified tax adviser.
+        </p>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
