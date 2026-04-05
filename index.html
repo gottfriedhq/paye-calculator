@@ -3,11 +3,28 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ghana PAYE & VAT Calculator</title>
+    <title>
+      Ghana PAYE Calculator, VAT Calculator, Treasury Bill Calculator &
+      Compound Interest
+    </title>
     <meta
       name="description"
-      content="Static Ghana tax calculator for monthly PAYE and VAT using current Ghana Revenue Authority rules."
+      content="Use Ghana-focused calculators for PAYE, VAT, treasury bills, and compound interest. Built for Ghana cedi inputs with current GRA PAYE and VAT rules plus Bank of Ghana treasury bill conventions."
     />
+    <meta
+      name="keywords"
+      content="Ghana PAYE calculator, PAYE calculator Ghana, Ghana VAT calculator, Ghana treasury bill calculator, Ghana compound interest calculator, Ghana tax calculator"
+    />
+    <meta name="robots" content="index,follow" />
+    <meta
+      property="og:title"
+      content="Ghana PAYE Calculator, VAT Calculator, Treasury Bill Calculator & Compound Interest"
+    />
+    <meta
+      property="og:description"
+      content="Calculate Ghana PAYE, VAT, treasury bill returns, and compound interest in one place."
+    />
+    <meta property="og:type" content="website" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -15,48 +32,76 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Ghana Tax and Finance Calculator",
+        "description": "Ghana-focused calculators for PAYE, VAT, treasury bills, and compound interest.",
+        "inLanguage": "en-GH"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How is PAYE calculated in Ghana?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Ghana PAYE is calculated on chargeable employment income after allowable deductions such as employee SSNIT and specific reliefs. Resident individuals are taxed using graduated monthly bands published by the Ghana Revenue Authority, while non-resident individuals are generally taxed at a flat rate."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the VAT rate in Ghana?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Under Ghana's VAT reforms effective January 1, 2026, the standard structure shown by GRA is 15% VAT plus 2.5% NHIL and 2.5% GETFund on the same taxable value, giving a 20% effective standard tax load."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How do treasury bill rates work in Ghana?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Bank of Ghana treasury bill tables commonly show both a discount rate and an interest rate for 91-day, 182-day, and 364-day bills. Bills are discount instruments, so the amount invested today is below the face value received at maturity."
+            }
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <main class="page-shell">
-      <section class="hero">
-        <div class="hero-copy">
-          <p class="eyebrow">Static and GitHub Pages-ready</p>
-          <h1>Ghana PAYE and VAT calculator for current GRA rules</h1>
-          <p class="hero-text">
-            Calculate monthly PAYE, SSNIT-adjusted take-home pay, and VAT under
-            Ghana's January 1, 2026 VAT reforms. Everything runs in plain HTML,
-            CSS, and JavaScript.
-          </p>
-          <div class="hero-badges">
-            <span>PAYE rates effective January 1, 2024</span>
-            <span>VAT reforms effective January 1, 2026</span>
-            <span>No build step required</span>
-          </div>
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Ghana tax and finance calculators</p>
+          <h1>Ghana PAYE, VAT, treasury bill and compound interest calculators</h1>
         </div>
-        <aside class="hero-card">
-          <p class="hero-card-label">Quick guide</p>
-          <ul class="hero-list">
-            <li>Use the PAYE section for monthly salary calculations.</li>
-            <li>
-              Use the VAT section for standard-rated, zero-rated, or exempt
-              supplies.
-            </li>
-            <li>
-              Double-check special cases such as bonuses, overtime, benefits in
-              kind, or sector-specific VAT exemptions.
-            </li>
-          </ul>
-        </aside>
+        <div class="topbar-copy">
+          Use the tools below to estimate monthly PAYE, VAT, treasury bill
+          returns, and compound growth in Ghana cedis.
+        </div>
+      </header>
+
+      <section class="jump-links" aria-label="Calculator shortcuts">
+        <a href="#paye-panel">Ghana PAYE Calculator</a>
+        <a href="#vat-panel">Ghana VAT Calculator</a>
+        <a href="#compound-panel">Compound Interest</a>
+        <a href="#tbill-panel">Treasury Bill Calculator</a>
       </section>
 
-      <section class="grid">
-        <article class="panel">
+      <section class="grid" aria-label="Ghana calculator grid">
+        <article class="panel" id="paye-panel">
           <div class="panel-head">
             <div>
               <p class="panel-kicker">Calculator 01</p>
-              <h2>Monthly PAYE</h2>
+              <h2>Ghana PAYE Calculator</h2>
             </div>
-            <span class="chip">Employment income</span>
+            <span class="chip">Monthly salary tax</span>
           </div>
 
           <form id="paye-form" class="calculator-form" autocomplete="off">
@@ -110,7 +155,7 @@
             </label>
 
             <label class="field">
-              <span class="field-label">Monthly tax relief / allowable deductions</span>
+              <span class="field-label">Monthly reliefs or allowable deductions</span>
               <div class="money-input">
                 <span>GH&#8373;</span>
                 <input
@@ -132,7 +177,7 @@
 
           <section class="results">
             <div class="result-card primary">
-              <p class="result-label">Monthly take-home pay</p>
+              <p class="result-label">Estimated take-home pay</p>
               <p class="result-value" id="netIncome">GH&#8373;0.00</p>
             </div>
 
@@ -162,11 +207,11 @@
           </section>
         </article>
 
-        <article class="panel">
+        <article class="panel" id="vat-panel">
           <div class="panel-head">
             <div>
               <p class="panel-kicker">Calculator 02</p>
-              <h2>VAT</h2>
+              <h2>Ghana VAT Calculator</h2>
             </div>
             <span class="chip">Goods and services</span>
           </div>
@@ -175,9 +220,11 @@
             <label class="field">
               <span class="field-label">Tax treatment</span>
               <select id="vatTreatment" name="vatTreatment">
-                <option value="standard">Standard rate (15% VAT + 2.5% NHIL + 2.5% GETFund)</option>
+                <option value="standard">
+                  Standard rate (15% VAT + 2.5% NHIL + 2.5% GETFund)
+                </option>
                 <option value="zeroRated">Zero-rated supply</option>
-                <option value="exempt">Exempt / relieved supply</option>
+                <option value="exempt">Exempt or relieved supply</option>
               </select>
             </label>
 
@@ -248,62 +295,352 @@
             <div class="note-card" id="vatNote"></div>
           </section>
         </article>
+
+        <article class="panel" id="compound-panel">
+          <div class="panel-head">
+            <div>
+              <p class="panel-kicker">Calculator 03</p>
+              <h2>Compound Interest Calculator</h2>
+            </div>
+            <span class="chip">Savings growth</span>
+          </div>
+
+          <form id="compound-form" class="calculator-form" autocomplete="off">
+            <label class="field">
+              <span class="field-label">Starting amount</span>
+              <div class="money-input">
+                <span>GH&#8373;</span>
+                <input
+                  id="compoundPrincipal"
+                  name="compoundPrincipal"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value="0"
+                />
+              </div>
+            </label>
+
+            <label class="field">
+              <span class="field-label">Monthly contribution</span>
+              <div class="money-input">
+                <span>GH&#8373;</span>
+                <input
+                  id="compoundContribution"
+                  name="compoundContribution"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value="0"
+                />
+              </div>
+            </label>
+
+            <label class="field">
+              <span class="field-label">Annual interest rate</span>
+              <div class="money-input percent-input">
+                <input
+                  id="compoundRate"
+                  name="compoundRate"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value="15"
+                />
+                <span>%</span>
+              </div>
+            </label>
+
+            <label class="field">
+              <span class="field-label">Compounding frequency</span>
+              <select id="compoundFrequency" name="compoundFrequency">
+                <option value="12">Monthly</option>
+                <option value="4">Quarterly</option>
+                <option value="2">Semi-annual</option>
+                <option value="1">Annual</option>
+                <option value="365">Daily</option>
+              </select>
+            </label>
+
+            <label class="field">
+              <span class="field-label">Investment period</span>
+              <div class="money-input period-input">
+                <input
+                  id="compoundYears"
+                  name="compoundYears"
+                  type="number"
+                  min="0"
+                  step="0.5"
+                  value="5"
+                />
+                <span>Years</span>
+              </div>
+            </label>
+          </form>
+
+          <section class="results">
+            <div class="result-card primary">
+              <p class="result-label">Future value</p>
+              <p class="result-value" id="compoundFutureValue">GH&#8373;0.00</p>
+            </div>
+
+            <div class="results-grid">
+              <div class="result-card">
+                <p class="result-label">Total deposits</p>
+                <p class="result-value small" id="compoundDeposits">GH&#8373;0.00</p>
+              </div>
+              <div class="result-card">
+                <p class="result-label">Interest earned</p>
+                <p class="result-value small" id="compoundInterestEarned">GH&#8373;0.00</p>
+              </div>
+              <div class="result-card">
+                <p class="result-label">Estimated monthly gain</p>
+                <p class="result-value small" id="compoundMonthlyGain">GH&#8373;0.00</p>
+              </div>
+              <div class="result-card">
+                <p class="result-label">Effective annual rate</p>
+                <p class="result-value small" id="compoundEffectiveRate">0.00%</p>
+              </div>
+            </div>
+
+            <div class="note-card" id="compoundNote"></div>
+          </section>
+        </article>
+
+        <article class="panel" id="tbill-panel">
+          <div class="panel-head">
+            <div>
+              <p class="panel-kicker">Calculator 04</p>
+              <h2>Ghana Treasury Bill Calculator</h2>
+            </div>
+            <span class="chip">91, 182 and 364 day bills</span>
+          </div>
+
+          <form id="tbill-form" class="calculator-form" autocomplete="off">
+            <label class="field">
+              <span class="field-label">Treasury bill tenor</span>
+              <select id="tbillTenor" name="tbillTenor">
+                <option value="91">91-day bill</option>
+                <option value="182">182-day bill</option>
+                <option value="364">364-day bill</option>
+              </select>
+            </label>
+
+            <div class="field-group">
+              <span class="field-label">Quoted rate type</span>
+              <div class="segmented-control">
+                <label>
+                  <input
+                    type="radio"
+                    name="tbillRateType"
+                    value="discount"
+                    checked
+                  />
+                  <span>Discount rate</span>
+                </label>
+                <label>
+                  <input type="radio" name="tbillRateType" value="interest" />
+                  <span>Interest rate</span>
+                </label>
+              </div>
+            </div>
+
+            <label class="field">
+              <span class="field-label">Quoted annual rate</span>
+              <div class="money-input percent-input">
+                <input
+                  id="tbillRate"
+                  name="tbillRate"
+                  type="number"
+                  min="0"
+                  step="0.0001"
+                  value="4.7679"
+                />
+                <span>%</span>
+              </div>
+            </label>
+
+            <div class="field-group">
+              <span class="field-label">Amount entered</span>
+              <div class="segmented-control">
+                <label>
+                  <input
+                    type="radio"
+                    name="tbillAmountType"
+                    value="investment"
+                    checked
+                  />
+                  <span>Invest today</span>
+                </label>
+                <label>
+                  <input type="radio" name="tbillAmountType" value="face" />
+                  <span>Face value</span>
+                </label>
+              </div>
+            </div>
+
+            <label class="field">
+              <span class="field-label">Amount</span>
+              <div class="money-input">
+                <span>GH&#8373;</span>
+                <input
+                  id="tbillAmount"
+                  name="tbillAmount"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value="1000"
+                />
+              </div>
+            </label>
+          </form>
+
+          <section class="results">
+            <div class="result-card primary">
+              <p class="result-label">Maturity value</p>
+              <p class="result-value" id="tbillMaturityValue">GH&#8373;0.00</p>
+            </div>
+
+            <div class="results-grid">
+              <div class="result-card">
+                <p class="result-label">Amount invested today</p>
+                <p class="result-value small" id="tbillPurchasePrice">GH&#8373;0.00</p>
+              </div>
+              <div class="result-card">
+                <p class="result-label">Interest earned</p>
+                <p class="result-value small" id="tbillInterestEarned">GH&#8373;0.00</p>
+              </div>
+              <div class="result-card">
+                <p class="result-label">Discount rate</p>
+                <p class="result-value small" id="tbillDiscountRate">0.0000%</p>
+              </div>
+              <div class="result-card">
+                <p class="result-label">Interest rate</p>
+                <p class="result-value small" id="tbillInterestRate">0.0000%</p>
+              </div>
+            </div>
+
+            <div class="note-card" id="tbillNote"></div>
+          </section>
+        </article>
       </section>
 
       <section class="info-strip">
         <div class="info-card">
-          <h3>Included assumptions</h3>
+          <h3>Made for Ghana searches</h3>
           <p>
-            PAYE is calculated on monthly chargeable employment income after the
-            SSNIT deduction toggle and the relief field you enter. Non-resident
-            PAYE uses the current flat 25% rule shown by GRA.
+            This page is structured around the exact tools people usually look
+            for: Ghana PAYE calculator, Ghana VAT calculator, Ghana treasury
+            bill calculator, and compound interest calculator in Ghana cedis.
           </p>
         </div>
         <div class="info-card">
-          <h3>VAT scope</h3>
+          <h3>Current rules used</h3>
           <p>
-            Standard VAT uses the post-reform structure effective January 1,
-            2026: 15% VAT, 2.5% NHIL, and 2.5% GETFund, all applied on the same
-            taxable value.
+            PAYE follows the current GRA resident and non-resident guidance, VAT
+            follows the January 1, 2026 reform structure, and treasury bills use
+            Bank of Ghana's standard 91-day, 182-day, and 364-day quote style.
           </p>
         </div>
         <div class="info-card">
-          <h3>Special cases</h3>
+          <h3>Important reminder</h3>
           <p>
-            Bonuses, overtime, benefits in kind, sector-specific exemptions, and
-            withholding scenarios may need separate treatment outside this tool.
+            These are planning calculators. Actual tax, investment, or filing
+            outcomes can differ where bonuses, overtime, exemptions,
+            withholding, or institution-specific terms apply.
           </p>
         </div>
       </section>
 
+      <section class="content-grid">
+        <article class="content-panel">
+          <p class="panel-kicker">Guide</p>
+          <h2>How these Ghana calculators work</h2>
+          <p>
+            The Ghana PAYE calculator estimates monthly take-home pay after
+            optional employee SSNIT and the reliefs you enter. The Ghana VAT
+            calculator handles standard-rate, zero-rated, and exempt supplies
+            using the post-reform VAT structure shown by GRA.
+          </p>
+          <p>
+            The treasury bill calculator uses Bank of Ghana's quotation style
+            and lets you work from either the discount rate or the interest
+            rate. The compound interest calculator helps you model long-term
+            growth in Ghana cedis with an initial amount and monthly additions.
+          </p>
+        </article>
+
+        <article class="content-panel">
+          <p class="panel-kicker">FAQ</p>
+          <h2>Frequently asked questions</h2>
+          <div class="faq-list">
+            <details open>
+              <summary>How is PAYE calculated in Ghana?</summary>
+              <p>
+                Resident PAYE is calculated on monthly chargeable income using
+                graduated tax bands published by GRA. Non-resident individuals
+                are generally taxed at a flat 25% of chargeable employment
+                income.
+              </p>
+            </details>
+            <details>
+              <summary>What is the standard VAT rate in Ghana?</summary>
+              <p>
+                Under the VAT reforms effective January 1, 2026, Ghana's
+                standard structure shown by GRA is 15% VAT plus 2.5% NHIL and
+                2.5% GETFund on the same taxable value.
+              </p>
+            </details>
+            <details>
+              <summary>How do Ghana treasury bills pay returns?</summary>
+              <p>
+                Treasury bills are discount instruments. You invest a lower
+                amount today and receive the face value at maturity. Bank of
+                Ghana commonly publishes both the discount rate and the
+                equivalent interest rate.
+              </p>
+            </details>
+            <details>
+              <summary>Does the compound interest calculator support monthly savings?</summary>
+              <p>
+                Yes. It assumes monthly additions and estimates growth over the
+                number of years you choose, while adjusting the monthly growth
+                effect to match the compounding frequency selected.
+              </p>
+            </details>
+          </div>
+        </article>
+      </section>
+
       <section class="sources">
         <div class="sources-head">
-          <p class="panel-kicker">Sources</p>
-          <h2>Current official references</h2>
+          <p class="panel-kicker">Official references</p>
+          <h2>Ghana sources used for these calculators</h2>
         </div>
         <ul class="sources-list">
           <li>
             <a href="https://gra.gov.gh/domestic-tax/tax-types/paye/" target="_blank" rel="noreferrer">
-              Ghana Revenue Authority: PAYE rates for resident and non-resident individuals
+              GRA PAYE guidance and current tax bands
             </a>
-            <span>Rates shown by GRA as effective January 1, 2024.</span>
+            <span>Used for resident and non-resident PAYE assumptions.</span>
           </li>
           <li>
             <a href="https://gra.gov.gh/domestic-tax/tax-types/vat/" target="_blank" rel="noreferrer">
-              Ghana Revenue Authority: VAT reforms and rate structure
+              GRA VAT reforms page
             </a>
-            <span>Reforms shown by GRA as effective January 1, 2026.</span>
+            <span>Used for the January 1, 2026 VAT structure.</span>
           </li>
           <li>
-            <a href="https://gra.gov.gh/news/portfolio/notice-to-all-vat-registered-taxpayers/" target="_blank" rel="noreferrer">
-              GRA notice to VAT-registered taxpayers
+            <a href="https://www.bog.gov.gh/treasury-and-the-markets/bank-of-ghana-bill-rates/" target="_blank" rel="noreferrer">
+              Bank of Ghana treasury bill rates
             </a>
-            <span>Confirms the removal of the COVID-19 levy and the 20% effective standard rate.</span>
+            <span>Used for 91-day, 182-day, and 364-day treasury bill conventions.</span>
           </li>
         </ul>
         <p class="disclaimer">
-          Disclaimer: this calculator is an informational aid, not tax advice.
-          Confirm unusual cases with GRA guidance or a qualified tax adviser.
+          Disclaimer: these calculators are informational tools, not legal, tax,
+          or investment advice. Always confirm unusual situations with the
+          appropriate official guidance or a qualified adviser.
         </p>
       </section>
     </main>

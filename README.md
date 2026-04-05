@@ -1,37 +1,59 @@
-# Ghana PAYE & VAT Calculator
+# Ghana Tax and Finance Calculators
 
-Static Ghana tax calculator for GitHub Pages.
+Static Ghana-focused calculator site for:
 
-## What it includes
+- Ghana PAYE
+- Ghana VAT
+- Ghana treasury bills
+- Compound interest in Ghana cedis
 
-- Monthly PAYE calculator with resident and non-resident options
-- Optional 5.5% employee SSNIT deduction on basic salary
-- VAT calculator for:
-  - Standard rate supplies
-  - Zero-rated supplies
-  - Exempt / relieved supplies
-- Tax-exclusive and tax-inclusive VAT calculations
+## Included calculators
 
-## Tax references used
+### Ghana PAYE calculator
 
-- PAYE: Ghana Revenue Authority monthly rates shown as effective January 1, 2024
-- VAT: Ghana Revenue Authority notice and VAT reforms shown as effective January 1, 2026
+- Resident and non-resident modes
+- Optional 5.5% employee SSNIT deduction
+- Monthly relief / deduction input
+- Band-by-band PAYE breakdown
 
-## Files
+### Ghana VAT calculator
 
-- `index.html`
-- `styles.css`
-- `script.js`
+- Standard-rated supplies
+- Zero-rated supplies
+- Exempt or relieved supplies
+- Tax-exclusive and tax-inclusive inputs
 
-## Publish on GitHub Pages
+### Ghana treasury bill calculator
 
-1. Push these files to a GitHub repository.
-2. In GitHub, open `Settings` -> `Pages`.
-3. Under `Build and deployment`, choose `Deploy from a branch`.
-4. Select your main branch and the `/ (root)` folder.
-5. Save, then wait for GitHub Pages to publish the site.
+- 91-day bill
+- 182-day bill
+- 364-day bill
+- Discount-rate and interest-rate modes
+- Investment amount or face-value inputs
+
+### Compound interest calculator
+
+- Starting amount
+- Monthly contribution
+- Annual rate
+- Compounding frequency
+- Investment period in years
+
+## Tech
+
+- Plain HTML
+- Plain CSS
+- Plain JavaScript
+- No build step
+- Suitable for static hosting
+
+## Official references used
+
+- Ghana Revenue Authority PAYE guidance
+- Ghana Revenue Authority VAT guidance and reforms
+- Bank of Ghana treasury bill rates
 
 ## Notes
 
-- This project has no build step and no package dependencies.
-- The calculator is for informational use and should be checked against current GRA guidance for unusual cases.
+- The calculators are informational tools, not tax or investment advice.
+- Always confirm special cases with the relevant official source or a qualified adviser.

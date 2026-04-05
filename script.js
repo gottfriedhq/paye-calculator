@@ -28,14 +28,25 @@ const TOTAL_STANDARD_VAT_RATE =
 
 const payeForm = document.getElementById("paye-form");
 const vatForm = document.getElementById("vat-form");
+const compoundForm = document.getElementById("compound-form");
+const tbillForm = document.getElementById("tbill-form");
 
 function toMoney(value) {
   return CURRENCY_FORMATTER.format(Number.isFinite(value) ? value : 0);
 }
 
+function toPercent(value, digits = 2) {
+  const numericValue = Number.isFinite(value) ? value : 0;
+  return `${numericValue.toFixed(digits)}%`;
+}
+
 function readNumber(inputId) {
   const input = document.getElementById(inputId);
   const value = Number.parseFloat(input.value);
+  return Number.isFinite(value) && value > 0 ? value : 0;
+}
+
+function clampPositive(value) {
   return Number.isFinite(value) && value > 0 ? value : 0;
 }
 
@@ -135,7 +146,7 @@ function renderPayeBreakdown(breakdown, taxpayerType) {
 
   const note =
     taxpayerType === "resident"
-      ? `<p class="helper-copy">Resident PAYE uses the monthly graduated band widths published by GRA for January 1, 2024.</p>`
+      ? `<p class="helper-copy">Resident PAYE uses the monthly graduated band widths currently shown by GRA.</p>`
       : `<p class="helper-copy">Non-resident PAYE is shown by GRA as a flat 25% of chargeable income.</p>`;
 
   container.innerHTML = `${header}${rows}${note}`;
@@ -170,18 +181,18 @@ function calculateVat() {
 
     note =
       amountType === "exclusive"
-        ? "Standard VAT is calculated on the taxable value, with VAT, NHIL, and GETFund all applied on the same base."
-        : "For tax-inclusive values, the calculator backs out the taxable value by dividing by 1.20 before splitting the taxes.";
+        ? "This Ghana VAT calculator applies VAT, NHIL, and GETFund on the same taxable value."
+        : "For tax-inclusive figures, the calculator backs out the taxable value by dividing by 1.20 before splitting the tax components.";
   } else if (treatment === "zeroRated") {
     taxableValue = amount;
     inclusiveTotal = amount;
     note =
-      "Zero-rated supplies carry a 0% rate for VAT, NHIL, and GETFund according to GRA's VAT guidance.";
+      "Zero-rated supplies carry a 0% rate for VAT, NHIL, and GETFund.";
   } else {
     taxableValue = amount;
     inclusiveTotal = amount;
     note =
-      "Exempt or relieved supplies do not attract VAT, NHIL, or GETFund. Confirm classification for the specific good or service.";
+      "Exempt or relieved supplies do not attract VAT, NHIL, or GETFund. Confirm the classification for the exact good or service.";
   }
 
   document.getElementById("vatTaxableValue").textContent = toMoney(taxableValue);
@@ -193,6 +204,107 @@ function calculateVat() {
   document.getElementById("vatNote").textContent = note;
 }
 
+function calculateCompoundInterest() {
+  const principal = readNumber("compoundPrincipal");
+  const contribution = readNumber("compoundContribution");
+  const annualRate = readNumber("compoundRate") / 100;
+  const frequency = clampPositive(Number.parseInt(compoundForm.elements.compoundFrequency.value, 10));
+  const years = readNumber("compoundYears");
+  const months = Math.round(years * 12);
+
+  const monthlyRate =
+    frequency > 0
+      ? Math.pow(1 + annualRate / frequency, frequency / 12) - 1
+      : 0;
+
+  let balance = principal;
+
+  for (let month = 0; month < months; month += 1) {
+    balance *= 1 + monthlyRate;
+    balance += contribution;
+  }
+
+  const totalDeposits = principal + contribution * months;
+  const interestEarned = balance - totalDeposits;
+  const effectiveAnnualRate = Math.pow(1 + monthlyRate, 12) - 1;
+  const estimatedMonthlyGain = balance * monthlyRate;
+
+  document.getElementById("compoundFutureValue").textContent = toMoney(balance);
+  document.getElementById("compoundDeposits").textContent = toMoney(totalDeposits);
+  document.getElementById("compoundInterestEarned").textContent = toMoney(interestEarned);
+  document.getElementById("compoundMonthlyGain").textContent = toMoney(estimatedMonthlyGain);
+  document.getElementById("compoundEffectiveRate").textContent = toPercent(
+    effectiveAnnualRate * 100
+  );
+  document.getElementById("compoundNote").textContent =
+    "Monthly contributions are added at the end of each month. The monthly growth effect is derived from the compounding frequency you selected.";
+}
+
+function calculateTreasuryBill() {
+  const tenorDays = clampPositive(Number.parseInt(tbillForm.elements.tbillTenor.value, 10));
+  const quotedRate = readNumber("tbillRate") / 100;
+  const rateType = tbillForm.elements.tbillRateType.value;
+  const amountType = tbillForm.elements.tbillAmountType.value;
+  const amount = readNumber("tbillAmount");
+
+  let purchasePrice = 0;
+  let maturityValue = 0;
+  let interestEarned = 0;
+  let discountRate = 0;
+  let interestRate = 0;
+  let note = "";
+
+  if (rateType === "discount") {
+    discountRate = quotedRate;
+    const factor = 1 - discountRate * (tenorDays / 364);
+
+    if (factor > 0) {
+      if (amountType === "investment") {
+        purchasePrice = amount;
+        maturityValue = purchasePrice / factor;
+      } else {
+        maturityValue = amount;
+        purchasePrice = maturityValue * factor;
+      }
+    }
+
+    interestEarned = maturityValue - purchasePrice;
+    interestRate =
+      purchasePrice > 0 ? (interestEarned / purchasePrice) * (364 / tenorDays) : 0;
+
+    note =
+      "This result uses the Bank of Ghana discount-bill convention with a 364-day basis. The quoted discount rate is converted to its equivalent interest rate.";
+  } else {
+    interestRate = quotedRate;
+    const factor = 1 + interestRate * (tenorDays / 364);
+
+    if (factor > 0) {
+      if (amountType === "investment") {
+        purchasePrice = amount;
+        maturityValue = purchasePrice * factor;
+      } else {
+        maturityValue = amount;
+        purchasePrice = maturityValue / factor;
+      }
+    }
+
+    interestEarned = maturityValue - purchasePrice;
+    discountRate =
+      maturityValue > 0 ? (interestEarned / maturityValue) * (364 / tenorDays) : 0;
+
+    note =
+      "This result starts from the quoted interest rate and works back to the discount equivalent commonly shown in Bank of Ghana bill tables.";
+  }
+
+  document.getElementById("tbillMaturityValue").textContent = toMoney(maturityValue);
+  document.getElementById("tbillPurchasePrice").textContent = toMoney(purchasePrice);
+  document.getElementById("tbillInterestEarned").textContent = toMoney(interestEarned);
+  document.getElementById("tbillDiscountRate").textContent = toPercent(discountRate * 100, 4);
+  document.getElementById("tbillInterestRate").textContent = toPercent(interestRate * 100, 4);
+  document.getElementById("tbillNote").textContent =
+    `${note} This treasury bill calculator shows gross pricing only and does not apply investor-specific taxes or fees.`;
+}
+
 function attachEvents(form, callback) {
   form.addEventListener("input", callback);
   form.addEventListener("change", callback);
@@ -200,6 +312,10 @@ function attachEvents(form, callback) {
 
 attachEvents(payeForm, calculatePaye);
 attachEvents(vatForm, calculateVat);
+attachEvents(compoundForm, calculateCompoundInterest);
+attachEvents(tbillForm, calculateTreasuryBill);
 
 calculatePaye();
 calculateVat();
+calculateCompoundInterest();
+calculateTreasuryBill();
